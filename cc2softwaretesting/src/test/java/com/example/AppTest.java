@@ -15,6 +15,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -96,18 +97,20 @@ public class AppTest {
 
     @Test(priority = 2)
     public void testCase3() throws InterruptedException, IOException {
-        driver.navigate().to("https://www.barnesandnoble.com/");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-accept-btn-handler"))).click();
+        // Wait for the cookie consent button to be clickable
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        WebElement acceptButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("onetrust-accept-btn-handler")));
+        acceptButton.click();
 
-        driver.findElement(By.xpath(
-                "/html/body/div[4]/div/dd/div/div/div[1]/div/a[5]"))
-                .click();
+        // Click on the desired element after the cookie consent is accepted
+        driver.findElement(By.xpath("/html/body/div[4]/div/dd/div/div/div[1]/div/a[5]")).click();
         Thread.sleep(2000);
         driver.findElement(By.xpath("//*[@id=\"rewards-modal-link\"]")).click();
         Thread.sleep(2000);
-        File screen = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String path = "C:\\Users\\kapil\\Downloads\\cc2softwaretesting\\cc2softwaretesting\\src\\test\\java\\com\\resources\\calculator.png";
-        FileUtils.copyFile(screen, new File(path));
+
+        // Take a screenshot
+        File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String screenshotPath = "C:\\Users\\kapil\\Downloads\\cc2softwaretesting\\cc2softwaretesting\\src\\test\\java\\com\\resources\\calculator.png";
+        FileUtils.copyFile(screenshotFile, new File(screenshotPath));
     }
 }
